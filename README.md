@@ -25,7 +25,13 @@ A custom class Cleaner handles operations like removing HTML tags, normalize pun
 - Word and sentence length
 - Punctuation and stopwords ratio
 
+### Hyperparameter Tuning 
+- Using RandomizedSearchCV
+
 ### Evaluation Metrics
 Each model is evaluated using:
 - Classification report
 - Confusion Matrix
+- Cross-val Accuracy
+
+
