@@ -9,13 +9,8 @@ Models used :
 ## Dataset
 I used dataset i found from kaggle, the link below :
 
-Train data : https://www.kaggle.com/datasets/sunilthite/llm-detect-ai-generated-text-dataset
-
-Consist of 27k+ rows of data
-
-Evaluation data : https://www.kaggle.com/datasets/zeyadusf/daigt-all-data-for-competition
-
-Consist of 2.7k rows of data
+- Train data : https://www.kaggle.com/datasets/sunilthite/llm-detect-ai-generated-text-dataset (27k+ rows of data)
+- Evaluation data : https://www.kaggle.com/datasets/zeyadusf/daigt-all-data-for-competition (2.7k rows of data)
 
 ### Text Preprocessing
 Texts are cleaned, and vectorized using TF-IDF.
