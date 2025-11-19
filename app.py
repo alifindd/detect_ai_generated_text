@@ -3,7 +3,7 @@ import joblib
 from src.preprocess_daigt import Cleaner, FeatureExtractor
 import src.utils as utils
 import pandas as pd
-# ====== CSS agar halaman full height ======
+
 st.markdown("""
 <style>
 html, body, [class*="css"]  {
