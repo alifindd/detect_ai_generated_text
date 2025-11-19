@@ -29,4 +29,6 @@ Each model is evaluated using:
 - Confusion Matrix
 - Cross-val Accuracy
 
+### Limitation
+Although this models can perform well enough to classify between human and AI text, there is still some limitations due to techniques used in this experiment are traditional. Model might misclassify AI text that intentionally written to avoid detection, LLMs can rewrite text to mimic human-like imperfections, making it harder for detectors to catch.
 
