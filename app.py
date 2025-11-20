@@ -3,6 +3,8 @@ import joblib
 from src.preprocess_daigt import Cleaner, FeatureExtractor
 import src.utils as utils
 import pandas as pd
+from docx import Document
+import pymupdf
 
 st.markdown("""
 <style>
@@ -58,9 +60,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-
-
-csv_file = st.file_uploader("Upload CSV file", type=["csv"])
+uploaded_file = st.file_uploader("Upload file", type=["csv","docx","pdf"])
 st.markdown("""
 <div style="
     display: flex; 
@@ -103,20 +103,64 @@ if st.button("Predict"):
 
         st.write("Model Used:", f"**{select_clf}**")
 
-    elif csv_file is not None:
-        df = pd.read_csv(csv_file)
+
+
+    elif uploaded_file is not None:
+        def extract_docx(file):
+            doc = Document(file)
+            full_text = []
+            for para in doc.paragraphs:
+                full_text.append(para.text)
+            joined_text  = "\n".join(full_text)
+            df = pd.DataFrame({"text": [joined_text]})
+            return df
+        
+        def extract_pdf(file):
+            pdf_bytes = file.read()
+            doc = pymupdf.open(stream=pdf_bytes, filetype="pdf")
+            text_pdf = ""
+
+            for page in doc:
+                text_pdf += page.get_text()
+        
+            df = pd.DataFrame({"text": [text_pdf]})
+            return df
+        
+        def extract_file(file, filename):
+            if filename.endswith(".docx"):
+                return extract_docx(file)
+            elif filename.endswith(".csv"):
+                return pd.read_csv(uploaded_file)
+            elif filename.endswith(".pdf"):
+                return extract_pdf(file)
+
+        df = extract_file(uploaded_file, uploaded_file.name)
         df["word_length"] = df["text"].apply(utils.word_length)
         df["avg_sentence_length"] = df["text"].apply(utils.avg_sentence_length)
         df["punct_ratio"] = df["text"].apply(utils.punct_ratio)
         df["stopword_ratio"] = df["text"].apply(utils.stopword_ratio)
 
-        preds = selected_clf.predict(df)
-        label = ["Human" if x == 0 else "AI" for x in preds]
-        df["label"] = label
-        df_result = df[["text", "label"]]
+        if not uploaded_file.name.endswith(".csv"):
+            preds = selected_clf.predict(df)
+            st.subheader("Prediction Result:")
+            st.write("This document is AI Generated" if preds[0] == 1 else "This document is Human Written")
+
+            if hasattr(selected_clf, "predict_proba"):
+                proba = selected_clf.predict_proba(df)
+                percent = int(proba[0][preds[0]] * 100)
+                st.write("Probability:", f"{percent}%")
+            else:
+                st.write("Probability is not supported for this classifier")
+        else:
+            preds = selected_clf.predict(df)
+            label = ["Human" if x == 0 else "AI" for x in preds]
+            df["label"] = label
+            df_result = df[["text", "label"]]
+            
+            st.write("Showing first 5 rows of data")
+            st.write(df_result.head())
+        st.write("Model Used:", f"**{select_clf}**")
         
-        st.write("Showing first 5 rows of data")
-        st.write(df_result.head())
         
 
 

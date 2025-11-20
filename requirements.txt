@@ -8,3 +8,5 @@ bs4
 wordcloud
 matplotlib==3.10.0
 seaborn==0.13.2
+python-docx==1.2.0
+pymupdf==1.26.6
