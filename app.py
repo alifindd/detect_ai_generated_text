@@ -137,13 +137,13 @@ if st.button("Predict"):
         df = extract_file(uploaded_file, uploaded_file.name)
         df["word_length"] = df["text"].apply(utils.word_length)
         df["avg_sentence_length"] = df["text"].apply(utils.avg_sentence_length)
-        df["punct_ratio"] = df["text"].apply(utils.punct_ratio)
+        df["punct_ratio"] = df["text"].apply(utils.punctuation_ratio)
         df["stopword_ratio"] = df["text"].apply(utils.stopword_ratio)
 
         if not uploaded_file.name.endswith(".csv"):
             preds = selected_clf.predict(df)
             st.subheader("Prediction Result:")
-            st.write("This document is AI Generated" if preds[0] == 1 else "This document is Human Written")
+            st.write(f"This file ({uploaded_file.name}) is AI Generated" if preds[0] == 1 else "This file ({uploaded_file.name}) is Human Written")
 
             if hasattr(selected_clf, "predict_proba"):
                 proba = selected_clf.predict_proba(df)
