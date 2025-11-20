@@ -137,7 +137,7 @@ if st.button("Predict"):
         df = extract_file(uploaded_file, uploaded_file.name)
         df["word_length"] = df["text"].apply(utils.word_length)
         df["avg_sentence_length"] = df["text"].apply(utils.avg_sentence_length)
-        df["punct_ratio"] = df["text"].apply(utils.punct_ratio)
+        df["punct_ratio"] = df["text"].apply(utils.punctuation_ratio)
         df["stopword_ratio"] = df["text"].apply(utils.stopword_ratio)
 
         if not uploaded_file.name.endswith(".csv"):
